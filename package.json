@@ -1,0 +1,58 @@
+{
+  "name": "@prats-tech/library-base",
+  "version": "1.0.0",
+  "description": "Just a template for libraries",
+  "repository": "git@github.com:prats-tech/library-base.git",
+  "authors": [
+    "Gustavo Bertoi <gustavo.bertoi@prats.tech>",
+    "Daniel Alves <daniel.alves@prats.tech>"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "prepare": "husky install",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint \"{src,test}/**/*.ts\" --fix",
+    "prebuild": "rimraf dist",
+    "build": "tsc -p tsconfig.json",
+    "pretest": "npm run lint",
+    "test": "node -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest",
+    "test:watch": "node -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest  --watch",
+    "test:cov": "node -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "prepublish": "yarn build",
+    "publish:patch": "npm version patch && yarn publish --access=public",
+    "publish:local": "yalc publish --push"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
+    "@types/jest": "^26.0.22",
+    "@types/node": "14.14.41",
+    "@types/supertest": "^2.0.10",
+    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/parser": "^4.19.0",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "husky": "^6.0.0",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "supertest": "^6.1.3",
+    "ts-jest": "^26.5.4",
+    "ts-loader": "^8.0.18",
+    "ts-node": "^9.1.1",
+    "ts-transform-paths": "^2.0.2",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "4.3.5"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "files": [
+    "/dist"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts"
+}
