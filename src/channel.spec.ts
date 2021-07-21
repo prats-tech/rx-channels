@@ -6,7 +6,10 @@ describe('Should test the Channel', () => {
   });
 
   it('Should dispatch a message', () => {
-    const channel = new Channel();
+    const channel = new Channel({
+      name: 'channel-test',
+      type: 'sync',
+    });
     channel.dispatch('message');
     expect(channel.dispatch).toBeInstanceOf(Function);
   });
