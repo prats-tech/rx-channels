@@ -1,6 +1,8 @@
 # RX-Channels
 
-A library for external communications between process (Microservices, pub/sub, websockets, etc...) using rxjs.
+A library for manipulate external communications between processes using RxJS (Observables)
+
+Your processes can be queues, events, websockets, SSE, http, what you want.
 
 ---
 
