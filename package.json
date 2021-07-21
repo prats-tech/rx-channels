@@ -23,7 +23,9 @@
     "publish:patch": "npm version patch && yarn publish --access=public",
     "publish:local": "yalc publish --push"
   },
-  "dependencies": {},
+  "dependencies": {
+    "rxjs": "^7.2.0"
+  },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",

@@ -1,17 +1,17 @@
-# Library name
+# RX-Channels
 
-Description
+A library for external communications between process (Microservices, pub/sub, websockets ,etc...) using rxjs.
 
 ---
 
 # Structure and Contribution
 
-Description
+To do;
 
 ---
 
 # Examples
 
-Description
+To do;
 
 ---
