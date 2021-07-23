@@ -14,7 +14,7 @@ export enum ChannelType {
 }
 
 export interface ChannelInterface {
-  dispatch<T = any>(message: T): ChannelInterface;
+  dispatch<T = any>(message: T): void;
   getObservable<T = any>(): Observable<T>;
   getName(): string;
   getType(): ChannelType | string;

@@ -34,20 +34,18 @@ export class Channel implements ChannelInterface {
     }
   }
 
-  dispatch<T = any>(message: T): ChannelInterface {
+  dispatch<T = any>(message: T) {
     if (!this.dispatcher) {
-      throw new Error(`Channel ${this.getName()} has no dispatcher.`); 
+      throw new Error(`Channel ${this.getName()} has no dispatcher.`);
     }
-
-    this.dispatcher.dispatch(message);
-    return this;
+    this.dispatcher.dispatch<T>(message);
   }
 
   getObservable<T = any>(): Observable<T> {
     if (!this.subscriber) {
       throw new Error(`Channel ${this.getName()} has no subscriber.`);
     }
-    return this.subscriber.getObservable();
+    return this.subscriber.getObservable<T>();
   }
 
   getName() {

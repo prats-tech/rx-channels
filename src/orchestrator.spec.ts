@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { ChannelOrchestrator } from './orchestrator';
 import { ChannelInterface } from './types';
 
-describe('Should test the ChannelOrchestrator', () => {
+describe('Should test the orchestrator', () => {
   type ChannelTest = {};
 
   const channel: jest.Mocked<ChannelInterface> = {
