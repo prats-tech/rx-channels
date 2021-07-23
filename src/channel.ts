@@ -1,4 +1,6 @@
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
+
+import { SyncProvider } from './sync-provider';
 
 import {
   ChannelConfig,
@@ -11,7 +13,6 @@ import {
 export class Channel implements ChannelInterface {
   private type: ChannelType | string;
   private name: string;
-  private subject?: Subject<any>;
 
   private subscriber?: ChannelSubscriberInterface | null;
   private dispatcher?: ChannelDispatcherInterface | null;
@@ -21,7 +22,9 @@ export class Channel implements ChannelInterface {
     this.name = config.name;
 
     if (this.type === ChannelType.Sync) {
-      this.subject = new Subject();
+      const syncProvider = new SyncProvider();
+      this.subscriber = syncProvider;
+      this.dispatcher = syncProvider;
     } else {
       if (!config.dispatcher && !config.subscriber) {
         throw new Error('Async channel requires a dispatcher or subscriber.');
@@ -32,28 +35,19 @@ export class Channel implements ChannelInterface {
   }
 
   dispatch<T = any>(message: T): ChannelInterface {
-    if (this.type === ChannelType.Async) {
-      if (this.dispatcher) {
-        this.dispatcher.dispatch(message);
-      } else {
-        throw new Error(`Channel ${this.getName()} has no dispatcher.`);
-      }
-    } else {
-      this.subject.next(message);
+    if (!this.dispatcher) {
+      throw new Error(`Channel ${this.getName()} has no dispatcher.`); 
     }
+
+    this.dispatcher.dispatch(message);
     return this;
   }
 
   getObservable<T = any>(): Observable<T> {
-    if (this.type === ChannelType.Async) {
-      if (this.subscriber) {
-        return this.subscriber.getObservable();
-      } else {
-        throw new Error(`Channel ${this.getName()} has no subscriber.`);
-      }
-    } else {
-      return this.subject.asObservable();
+    if (!this.subscriber) {
+      throw new Error(`Channel ${this.getName()} has no subscriber.`);
     }
+    return this.subscriber.getObservable();
   }
 
   getName() {
