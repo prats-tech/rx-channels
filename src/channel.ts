@@ -1,33 +1,66 @@
 import { Observable, Subject } from 'rxjs';
 
-export interface ChannelInterface {
-  dispatch<T = any>(message: T): ChannelInterface;
-  getObservable<T = any>(): Observable<T>;
-  getName(): string;
-}
-
-export class ChannelConfig {
-  type: 'sync' | 'async';
-  name: string;
-}
+import {
+  ChannelConfig,
+  ChannelDispatcherInterface,
+  ChannelInterface,
+  ChannelSubscriberInterface,
+  ChannelType,
+} from './types';
 
 export class Channel implements ChannelInterface {
-  private subject: Subject<any>;
+  private type: ChannelType | string;
+  private name: string;
+  private subject?: Subject<any>;
 
-  constructor(private config: ChannelConfig) {
-    this.subject = new Subject();
+  private subscriber?: ChannelSubscriberInterface | null;
+  private dispatcher?: ChannelDispatcherInterface | null;
+
+  constructor(config: ChannelConfig) {
+    this.type = config.type;
+    this.name = config.name;
+
+    if (this.type === ChannelType.Sync) {
+      this.subject = new Subject();
+    } else {
+      if (!config.dispatcher && !config.subscriber) {
+        throw new Error('Async channel requires a dispatcher or subscriber.');
+      }
+      this.dispatcher = config.dispatcher ?? null;
+      this.subscriber = config.subscriber ?? null;
+    }
   }
 
   dispatch<T = any>(message: T): ChannelInterface {
-    this.subject.next(message);
+    if (this.type === ChannelType.Async) {
+      if (this.dispatcher) {
+        this.dispatcher.dispatch(message);
+      } else {
+        throw new Error(`Channel ${this.getName()} has no dispatcher.`);
+      }
+    } else {
+      this.subject.next(message);
+    }
     return this;
   }
 
   getObservable<T = any>(): Observable<T> {
-    return this.subject.asObservable();
+    if (this.type === ChannelType.Async) {
+      if (this.subscriber) {
+        return this.subscriber.getObservable();
+      } else {
+        throw new Error(`Channel ${this.getName()} has no subscriber.`);
+      }
+    } else {
+      return this.subject.asObservable();
+    }
   }
 
   getName() {
-    return this.config.name;
+    return this.name;
+  }
+
+  getType(): string {
+    return this.type;
   }
 }

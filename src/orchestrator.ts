@@ -1,19 +1,19 @@
 import { Observable } from 'rxjs';
 
-import { Channel, ChannelConfig, ChannelInterface } from './channel';
+import { Channel } from './channel';
+import { ChannelConfig, ChannelInterface } from './types';
 
 export interface ChannelOrchestratorInterface {
-  createChannel<T = any>(
-    configOrName: ChannelConfig,
-    channel?: ChannelInterface,
+  addChannel<T = any>(
+    configOrChannel: ChannelConfig | ChannelInterface,
   ): Observable<T>;
-  dispatch<T = any>(key: string, message: T): ChannelOrchestratorInterface;
-  getObservable<T = any>(key: string): Observable<T>;
+  dispatch<T = any>(channel: string, message: T): ChannelOrchestratorInterface;
+  getObservable<T = any>(channel: string): Observable<T>;
 }
 
 export class ChannelOrchestrator implements ChannelOrchestratorInterface {
-  // singleton/static
   private static instance: ChannelOrchestrator;
+
   public static getInstance() {
     if (!this.instance) {
       this.instance = new ChannelOrchestrator();
@@ -27,34 +27,37 @@ export class ChannelOrchestrator implements ChannelOrchestratorInterface {
 
   private channels: Map<string, ChannelInterface>;
 
-  // instance
   private constructor() {
     this.channels = new Map<string, ChannelInterface>();
   }
 
-  createChannel<T = any>(
+  private channelFactory(config: ChannelConfig): Channel {
+    return new Channel(config);
+  }
+
+  addChannel<T = any>(
     configOrChannel: ChannelConfig | ChannelInterface,
   ): Observable<T> {
     const channel: ChannelInterface =
       configOrChannel instanceof ChannelConfig
-        ? new Channel(configOrChannel as ChannelConfig)
+        ? this.channelFactory(configOrChannel)
         : configOrChannel;
     this.channels.set(channel.getName(), channel);
     return this.getObservable(channel.getName());
   }
 
-  dispatch<T = any>(key: string, message: T): ChannelOrchestrator {
-    if (!this.channels.has(key)) {
+  dispatch<T = any>(channel: string, message: T): ChannelOrchestrator {
+    if (!this.channels.has(channel)) {
       throw new Error('Channel not found.');
     }
-    this.channels.get(key).dispatch<T>(message);
+    this.channels.get(channel).dispatch<T>(message);
     return this;
   }
 
-  getObservable<T = any>(key: string): Observable<T> {
-    if (!this.channels.has(key)) {
+  getObservable<T = any>(channel: string): Observable<T> {
+    if (!this.channels.has(channel)) {
       throw new Error('Channel not found.');
     }
-    return this.channels.get(key).getObservable<T>();
+    return this.channels.get(channel).getObservable<T>();
   }
 }

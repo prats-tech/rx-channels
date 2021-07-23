@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 
 import { ChannelOrchestrator } from './orchestrator';
-import { ChannelInterface } from './channel';
+import { ChannelInterface } from './types';
 
 describe('Should test the ChannelOrchestrator', () => {
   type ChannelTest = {};
@@ -10,6 +10,7 @@ describe('Should test the ChannelOrchestrator', () => {
     dispatch: jest.fn(),
     getObservable: jest.fn(),
     getName: jest.fn(),
+    getType: jest.fn(),
   };
 
   beforeEach(() => {
@@ -24,12 +25,12 @@ describe('Should test the ChannelOrchestrator', () => {
 
   it('should create a new channel', () => {
     const channelObservable =
-      ChannelOrchestrator.getInstance().createChannel<ChannelTest>(channel);
+      ChannelOrchestrator.getInstance().addChannel<ChannelTest>(channel);
     expect(channelObservable).toBeInstanceOf(Observable);
   });
 
   it('should get an observable of already created channel', () => {
-    ChannelOrchestrator.getInstance().createChannel<ChannelTest>(channel);
+    ChannelOrchestrator.getInstance().addChannel<ChannelTest>(channel);
     const channelObservable =
       ChannelOrchestrator.getInstance().getObservable<ChannelTest>(
         'channel-test',
@@ -55,7 +56,7 @@ describe('Should test the ChannelOrchestrator', () => {
       expect(message).toBe(myMessage);
       return {} as ChannelInterface;
     });
-    ChannelOrchestrator.getInstance().createChannel<ChannelTest>(channel);
+    ChannelOrchestrator.getInstance().addChannel<ChannelTest>(channel);
     ChannelOrchestrator.getInstance().dispatch('channel-test', myMessage);
     expect(channel.dispatch).toBeCalled();
   });
