@@ -26,3 +26,11 @@ export class ChannelConfig {
   dispatcher?: ChannelDispatcherInterface;
   subscriber?: ChannelSubscriberInterface;
 }
+
+export interface ChannelOrchestratorInterface {
+  addChannel<T = any>(
+    configOrChannel: ChannelConfig | ChannelInterface,
+  ): Observable<T>;
+  dispatch<T = any>(channel: string, message: T): ChannelOrchestratorInterface;
+  getObservable<T = any>(channel: string): Observable<T>;
+}

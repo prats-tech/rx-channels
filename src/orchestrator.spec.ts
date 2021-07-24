@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { ChannelOrchestrator } from './orchestrator';
 import { ChannelInterface } from './types';
 
-describe('Should test the orchestrator', () => {
+describe('Orchestrator use cases scenarios', () => {
   type ChannelTest = {};
 
   const channel: jest.Mocked<ChannelInterface> = {
@@ -43,7 +43,7 @@ describe('Should test the orchestrator', () => {
       ChannelOrchestrator.getInstance().getObservable<ChannelTest>(
         'channel-test',
       );
-      // error was not throw, why?
+      // just to prevent mistakes of implementation
       expect(true).toBe(false);
     } catch (error) {
       expect(error).toBeInstanceOf(Error);
@@ -64,7 +64,7 @@ describe('Should test the orchestrator', () => {
   it('should throw an error when dispatching a message of non-existing channel', () => {
     try {
       ChannelOrchestrator.getInstance().dispatch('channel-test', 'message');
-      // error was not throw, why?
+      // just to prevent mistakes of implementation
       expect(true).toBe(false);
     } catch (error) {
       expect(error).toBeInstanceOf(Error);

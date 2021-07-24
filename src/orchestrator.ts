@@ -1,15 +1,11 @@
 import { Observable } from 'rxjs';
 
 import { Channel } from './channel';
-import { ChannelConfig, ChannelInterface } from './types';
-
-export interface ChannelOrchestratorInterface {
-  addChannel<T = any>(
-    configOrChannel: ChannelConfig | ChannelInterface,
-  ): Observable<T>;
-  dispatch<T = any>(channel: string, message: T): ChannelOrchestratorInterface;
-  getObservable<T = any>(channel: string): Observable<T>;
-}
+import {
+  ChannelConfig,
+  ChannelInterface,
+  ChannelOrchestratorInterface,
+} from './types';
 
 export class ChannelOrchestrator implements ChannelOrchestratorInterface {
   private static instance: ChannelOrchestrator;
