@@ -1,7 +1,8 @@
 import { Observable } from 'rxjs';
+
 import { SyncProvider } from './sync-provider';
 
-describe('Sync-provider use cases scenarios', () => {
+describe('SyncProvider use-cases', () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });

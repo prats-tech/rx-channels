@@ -11,14 +11,13 @@ import {
 } from './types';
 
 export class Channel implements ChannelInterface {
-  private type: ChannelType | string;
+  private type: ChannelType;
   private name: string;
-
   private subscriber?: ChannelSubscriberInterface | null;
   private dispatcher?: ChannelDispatcherInterface | null;
 
   constructor(config: ChannelConfig) {
-    this.type = config.type;
+    this.type = config.type ?? ChannelType.Sync;
     this.name = config.name;
 
     if (this.type === ChannelType.Sync) {
@@ -34,7 +33,7 @@ export class Channel implements ChannelInterface {
     }
   }
 
-  dispatch<T = any>(message: T) {
+  dispatch<T = any>(message: T): void {
     if (!this.dispatcher) {
       throw new Error(`Channel ${this.getName()} has no dispatcher.`);
     }
@@ -48,11 +47,11 @@ export class Channel implements ChannelInterface {
     return this.subscriber.getObservable<T>();
   }
 
-  getName() {
+  getName(): string {
     return this.name;
   }
 
-  getType(): string {
+  getType(): ChannelType {
     return this.type;
   }
 }

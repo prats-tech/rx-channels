@@ -2,9 +2,9 @@ import { Observable } from 'rxjs';
 
 import { Channel } from './channel';
 import {
-  ChannelConfig,
   ChannelInterface,
   ChannelOrchestratorInterface,
+  CreateChannelInterface,
 } from './types';
 
 export class ChannelOrchestrator implements ChannelOrchestratorInterface {
@@ -27,19 +27,40 @@ export class ChannelOrchestrator implements ChannelOrchestratorInterface {
     this.channels = new Map<string, ChannelInterface>();
   }
 
-  private channelFactory(config: ChannelConfig): Channel {
-    return new Channel(config);
+  addChannel(contract: CreateChannelInterface): this {
+    if (!contract.channel && !contract.config) {
+      throw new Error(
+        'You cannot add a channel without informing a config or a instance of channel.',
+      );
+    } else if (contract.channel && contract.config) {
+      throw new Error(
+        'You cannot add a channel, informing an instance and a config.',
+      );
+    }
+
+    const channel: ChannelInterface = contract.config
+      ? new Channel(contract.config)
+      : contract.channel;
+
+    if (this.channels.has(channel.getName())) {
+      throw new Error(`Channel ${channel.getName()} already exists.`);
+    }
+
+    this.channels.set(channel.getName(), channel);
+
+    return this;
   }
 
-  addChannel<T = any>(
-    configOrChannel: ChannelConfig | ChannelInterface,
-  ): Observable<T> {
-    const channel: ChannelInterface =
-      configOrChannel instanceof ChannelConfig
-        ? this.channelFactory(configOrChannel)
-        : configOrChannel;
-    this.channels.set(channel.getName(), channel);
-    return this.getObservable(channel.getName());
+  destroyChannel(channel: string): boolean {
+    if (!this.channels.has(channel)) {
+      throw new Error('Channel not found.');
+    }
+    return this.channels.delete(channel);
+  }
+
+  destroyChannels(): boolean {
+    this.channels.clear();
+    return true;
   }
 
   dispatch<T = any>(channel: string, message: T): ChannelOrchestrator {
@@ -50,7 +71,7 @@ export class ChannelOrchestrator implements ChannelOrchestratorInterface {
     return this;
   }
 
-  getObservable<T = any>(channel: string): Observable<T> {
+  getChannelObservable<T = any>(channel: string): Observable<T> {
     if (!this.channels.has(channel)) {
       throw new Error('Channel not found.');
     }
