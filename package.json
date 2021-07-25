@@ -1,8 +1,8 @@
 {
-  "name": "@prats-tech/library-base",
+  "name": "@prats-tech/rx-channels",
   "version": "1.0.0",
-  "description": "Just a template for libraries",
-  "repository": "git@github.com:prats-tech/library-base.git",
+  "description": "A library for manipulate external communications between processes using RxJS (Observables).",
+  "repository": "git@github.com:prats-tech/rx-channels.git",
   "authors": [
     "Gustavo Bertoi <gustavo.bertoi@prats.tech>",
     "Daniel Alves <daniel.alves@prats.tech>"
