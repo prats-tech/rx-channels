@@ -2,7 +2,9 @@
   "name": "@prats-tech/rx-channels",
   "version": "1.0.0",
   "description": "A library for manipulate external communications between processes using RxJS (Observables).",
-  "repository": "git@github.com:prats-tech/rx-channels.git",
+  "repository": {
+    "url": "https://github.com/prats-tech/rx-channels"
+  },
   "authors": [
     "Gustavo Bertoi <gustavo.bertoi@prats.tech>",
     "Daniel Alves <daniel.alves@prats.tech>"
