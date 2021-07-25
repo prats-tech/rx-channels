@@ -8,6 +8,14 @@
     "Daniel Alves <daniel.alves@prats.tech>"
   ],
   "license": "MIT",
+  "keywords": [
+    "rxjs",
+    "channels",
+    "observables",
+    "messages",
+    "processes",
+    "prats"
+  ],
   "scripts": {
     "commit": "cz",
     "prepare": "husky install",
