@@ -42,11 +42,9 @@ export class ChannelOrchestrator implements ChannelOrchestratorInterface {
       ? new Channel(contract.config)
       : contract.channel;
 
-    if (this.channels.has(channel.getName())) {
-      throw new Error(`Channel ${channel.getName()} already exists.`);
+    if (!this.channels.has(channel.getName())) {
+      this.channels.set(channel.getName(), channel);
     }
-
-    this.channels.set(channel.getName(), channel);
 
     return this;
   }
