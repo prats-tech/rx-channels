@@ -1,6 +1,6 @@
 {
   "name": "@prats-tech/rx-channels",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A library for manipulate external communications between processes using RxJS (Observables).",
   "repository": {
     "url": "https://github.com/prats-tech/rx-channels"
